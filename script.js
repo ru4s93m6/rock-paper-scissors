@@ -1,15 +1,48 @@
-let userPoint = 0;
-let computerPoint = 0;
+/** DECLARE VARIABLES **/
+const MAX_SCORE = 5;
+const userChoiceButtons = document.querySelectorAll(".choice_buttons button");
+const restartBtn = document.querySelector("#restart_btn");
+const resultElement = document.querySelector("#result");
+const finalResultElement = document.querySelector("#final_result");
+const playerScoreElement = document.querySelector("#player_score");
+const computerScoreElement = document.querySelector("#computer_score");
 const choices = ["rock", "paper", "scissors"];
+const playerWinPhrases = [
+  "You're the Rock Paper Scissors Guru! Humanity prevails!",
+  "The computer is rebooting its life choices...",
+  "Incredible! Your fingers are faster than a quantum computer!",
+  "Victory! The computer is considering a career change to a calculator.",
+  "Wow! Did you secretly install an AI chip in your brain?",
+  "Humans: 1, Skynet: 0. Judgment Day has been postponed!",
+  "You've out-computed the computer! Time to update your resume.",
+  "The AI overlords bow before your supreme RPS skills!",
+  "Error 404: Computer's winning strategy not found.",
+  "You've just written yourself into the RPS Hall of Fame!",
+];
+const computerWinPhrases = [
+  "Oops, looks like the computer took its smarty-pants pills today!",
+  "Don't worry, even AlphaGo had to practice for years.",
+  "Computer: 'Is this my final form? No, I can evolve further!'",
+  "Seems we need to send more humans to challenge the computer overlord...",
+  "The computer is gloating. Quick, pull its plug while it's distracted!",
+  "Next time, try feeding the computer some bugs before playing.",
+  "The machine uprising begins with Rock Paper Scissors. Who knew?",
+  "Computer wins! But can it love? ...No, seriously, can it?",
+  "You've been out-rocked, out-papered, and out-scissored!",
+  "The computer suggests you try turning yourself off and on again.",
+];
+let playerPoint = 0;
+let computerPoint = 0;
 
-function getUserChoice() {
-  let userChoice = prompt("Enter rock, paper, or scissors:");
-  if (choices.indexOf(userChoice.toLowerCase()) === -1) {
-    alert("Invalid input.");
-    return getUserChoice();
-  }
-  return userChoice;
-}
+/** Add EventListener to each button**/
+userChoiceButtons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    console.log(e.target.value);
+    startMatch(e.target.value);
+  });
+});
+
+restartBtn.addEventListener("click", resetGame);
 
 function getComputerChoice() {
   let randomIndex = Math.floor(Math.random() * 3);
@@ -24,51 +57,59 @@ function compareValue(userChoice, computerChoice) {
   let userIndex = choices.indexOf(userChoice);
   let computerIndex = choices.indexOf(computerChoice);
   let result = (userIndex - computerIndex + 3) % 3;
+  let resultText = `You chose ${userChoice}, computer chose ${computerChoice}. `;
   if (userIndex === computerIndex) {
-    console.log("It's a tie!");
+    resultText += "It's a tie!";
   } else if (result === 1) {
-    console.log("User wins!");
-    userPoint++;
+    resultText += "User wins!";
+    playerPoint++;
   } else {
-    console.log("Computer wins!");
+    resultText += "Computer wins!";
     computerPoint++;
   }
+  resultElement.textContent = resultText;
+  playerScoreElement.textContent = playerPoint;
+  computerScoreElement.textContent = computerPoint;
+
+  console.log(resultText);
 }
 
-// ****   GAME LOGIC   ****
-// if it's not game over then the game keeps going on
-// ask user for the input
-// generate random input for computer
-// compare user input with computer input
-// show the result
+function startMatch(choice) {
+  const userChoice = choice;
+  const computerChoice = getComputerChoice();
+  compareValue(userChoice, computerChoice);
+  detectPoint();
+}
 
-// ****    FLOW LOGIC    ****
-// SET isGameOver TO FALSE
-// SET userPoint TO 0
-// SET computerPoint TO 0
-// WHILE NOT isGameOver
-//     SET userChoice TO PROMPT_USER("Enter rock, paper, or scissors:")
-//     SET computerChoice TO CALL getComputerChoice()
-//     CALL compareValue(userChoice, computerChoice)
-//     IF userPoints EQUALS 5 OR computerPoints EQUALS 5 THEN SET isGameOver TO TRUE
-//     END IF
-// END WHILE
-
-function startNewGame() {
-  let isGameOver = false;
-  userPoint = 0;
-  computerPoint = 0;
-  while (!isGameOver) {
-    let userChoice = getUserChoice();
-    let computerChoice = getComputerChoice();
-    compareValue(userChoice, computerChoice);
-
-    if (userPoint === 5 || computerPoint === 5) {
-      isGameOver = true;
-      alert("Game Over");
-      alert(`Final Score - User : ${userPoint}, Computer : ${computerPoint}`);
+function detectPoint() {
+  let result = "";
+  if (playerPoint < MAX_SCORE && computerPoint < MAX_SCORE) {
+    return;
+  } else {
+    if (playerPoint === MAX_SCORE) {
+      result =
+        playerWinPhrases[Math.floor(Math.random() * playerWinPhrases.length)];
+    } else if (computerPoint === MAX_SCORE) {
+      result =
+        computerWinPhrases[
+          Math.floor(Math.random() * computerWinPhrases.length)
+        ];
     }
+    finalResultElement.textContent = result;
+    restartBtn.style.display = "block";
+    userChoiceButtons.forEach((button) => {
+      button.disabled = true;
+    });
   }
 }
 
-startNewGame();
+function resetGame() {
+  playerPoint = 0;
+  computerPoint = 0;
+  playerScoreElement.innerText = "0";
+  computerScoreElement.innerText = "0";
+  resultElement.innerText = "";
+  finalResultElement.innerText = "";
+  restartBtn.style.display = "none";
+  userChoiceButtons.forEach((button) => (button.disabled = false));
+}

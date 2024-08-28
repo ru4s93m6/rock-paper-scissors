@@ -3,10 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Rock Paper Scissors</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <button onclick="startNewGame()">Restart the game</button>
-    <script src="./script.js"></script>
+    <main>
+      <h1>ROCK PAPER SCISSORS</h1>
+      <div class="result_container">
+        <p id="result"></p>
+        <p id="final_result"></p>
+      </div>
+
+      <div class="score_container">
+        <div class="score_item">
+          Player Score <span id="player_score">0</span>
+        </div>
+        <div class="score_item">
+          Computer Score <span id="computer_score">0</span>
+        </div>
+      </div>
+
+      <div class="user_choices">
+        <p>Choose your move. Rock, Paper or Scissors?</p>
+        <div class="choice_buttons">
+          <button id="rock_btn" value="rock">Rock</button>
+          <button id="paper_btn" value="paper">Paper</button>
+          <button id="scissor_btn" value="scissor">Scissors</button>
+        </div>
+        <button id="restart_btn">Restart</button>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
   </body>
 </html>
